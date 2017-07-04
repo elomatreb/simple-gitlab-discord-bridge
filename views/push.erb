@@ -1,0 +1,5 @@
+<%= user_name %> pushed <%= commits.size %> <%= commits.size == 1 ? "commit" : "commits" %> to <%= branch_from_ref ref %> on <%= repository["name"] %>:
+
+<% commits.each do |c| %>
+- <%= md_link c["id"][0, 7], c["url"] %>: <%= c["message"] %>
+<% end %>

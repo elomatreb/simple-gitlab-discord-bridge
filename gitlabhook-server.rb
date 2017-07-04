@@ -16,6 +16,16 @@ helpers do
   def gitlab_secret
     config.dig("gitlab", "secret") || raise("No gitlab secret configured!")
   end
+
+  # View helpers
+
+  def md_link(text, url)
+    format "[%s](%s)", text, url
+  end
+
+  def branch_from_ref(ref)
+    ref[/\w+\z/]
+  end
 end
 
 before do
@@ -32,7 +42,7 @@ end
 post "/push" do
   case @request_body["object_kind"]
   when "push"
-    ""
+    erb :push, locals: @request_body
   else
     status 400
     format "Unkown object_kind: '%s'",
