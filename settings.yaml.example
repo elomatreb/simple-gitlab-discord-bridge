@@ -1,5 +1,2 @@
-gitlab:
-  secret: "VERY SECRET"
-
-discord:
-  url: "https://somediscordurl.com"
+gitlab_secret: "VERYSECRET"
+discord_webhook_url: "https://somediscordurl.com"
