@@ -1,5 +1,7 @@
 require "sinatra"
 require "yaml"
+require "json"
+require "rest-client"
 require "digest/sha1"
 
 require "sinatra/reloader" if development?
@@ -15,6 +17,10 @@ helpers do
 
   def gitlab_secret
     config.dig("gitlab", "secret") || raise("No gitlab secret configured!")
+  end
+
+  def discord_url
+    config.dig("discord", "webhook_url") || raise("No Discord URL configured!")
   end
 
   # View helpers
@@ -42,7 +48,15 @@ end
 post "/push" do
   case @request_body["object_kind"]
   when "push"
-    erb :push, locals: @request_body
+    payload = JSON.dump(content: erb(:push, locals: @request_body))
+
+    begin
+      RestClient.post discord_url, payload, content_type: :json
+      "OK"
+    rescue RestClient::ExceptionWithResponse => err
+      status 500
+      "Discord Webhook error, see logs. Got status code #{err.response.code}"
+    end
   else
     status 400
     format "Unkown object_kind: '%s'",
