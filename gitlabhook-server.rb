@@ -2,6 +2,8 @@ require "sinatra"
 require "yaml"
 require "digest/sha1"
 
+require "sinatra/reloader" if development?
+
 helpers do
   def config
     @config ||= YAML.load(File.read("settings.yaml"))
