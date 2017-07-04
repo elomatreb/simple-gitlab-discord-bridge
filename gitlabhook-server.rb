@@ -19,10 +19,23 @@ helpers do
 end
 
 before do
+  halt 400 unless request.env["CONTENT_TYPE"] == "application/json"
   halt 400 unless request.has_header? "HTTP_X_GITLAB_TOKEN"
-  halt 401 unless constant_time_equal(gitlab_secret, request.env["HTTP_X_GITLAB_TOKEN"])
+  halt 401 unless constant_time_equal(gitlab_secret,
+                                      request.env["HTTP_X_GITLAB_TOKEN"])
+
+  # Pre-parse JSON body
+  request.body.rewind
+  @request_body = JSON.parse request.body.read
 end
 
 post "/push" do
-  
+  case @request_body["object_kind"]
+  when "push"
+    ""
+  else
+    status 400
+    format "Unkown object_kind: '%s'",
+           Rack::Utils.escape_html(@request_body["object_kind"])
+  end
 end
