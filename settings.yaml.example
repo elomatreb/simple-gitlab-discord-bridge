@@ -1,0 +1,6 @@
+gitlab:
+  secret: "VERY SECRET"
+
+discord:
+  url: "https://somediscordurl.com"
+
