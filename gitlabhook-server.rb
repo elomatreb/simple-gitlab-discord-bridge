@@ -17,6 +17,7 @@ helpers do
 end
 
 before do
+  halt 400 unless request.has_header? "HTTP_X_GITLAB_TOKEN"
   halt 401 unless constant_time_equal(gitlab_secret, request.env["HTTP_X_GITLAB_TOKEN"])
 end
 
