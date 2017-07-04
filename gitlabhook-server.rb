@@ -15,10 +15,12 @@ rescue
 end
 
 # Validate config
-%w[gitlab_secret discord_webhook_url].each do |key|
+%w[gitlab_secret discord_webhook_url listen_port].each do |key|
   next if config.key? key
   abort "ERROR: Configuration is missing '#{key}'. See settings.yaml.example"
 end
+
+set :port, config["listen_port"]
 
 helpers do
   def constant_time_equal(a, b)
