@@ -67,7 +67,7 @@ post "/push" do
       "OK"
     rescue RestClient::ExceptionWithResponse => err
       status 500
-      "Discord Webhook error, see logs. Got status code #{err.response.code}"
+      "Discord Webhook returned status code #{err.response.code}"
     end
   else
     status 400
